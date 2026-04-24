@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GAMSAT Score Predictor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      padding: 15px;
+      max-width: 600px;
+      margin: auto;
+      background-color: #E6F0EC;
+    }
+
+    .hidden { display: none; }
+
+    button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px;
+      border-radius: 6px;
+      border: none;
+      background-color: #2F7F73;
+      color: white;
+      font-size: 16px;
+    }
+
+    button.secondary {
+      background-color: #ccc;
+      color: black;
+    }
+
+    #logo {
+      width: 200px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    /* Progress bar */
+    #progressBarContainer {
+      width: 100%;
+      background: #ddd;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    #progressBar {
+      height: 10px;
+      width: 0%;
+      background: #2F7F73;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+  </style>
+</head>
+
+<body>
+
+<img id="logo" src="logo.png">
+
+<div id="landing" class="card">
+  <h2>Free GAMSAT Score Predictor</h2>
+  <button onclick="startQuiz()">Start Assessment</button>
+</div>
+
+<div id="quiz" class="hidden card">
+  <div id="progressBarContainer">
+    <div id="progressBar"></div>
+  </div>
+
+  <h3 id="question"></h3>
+  <div id="answers"></div>
+
+  <button class="secondary" onclick="goBack()">Back</button>
+</div>
+
+<div id="results" class="hidden card">
+  <h2>Your Results</h2>
+  <p id="score"></p>
+</div>
+
+<script>
+const questions = [
+  { text: "Degree Background", answers: ["Biomedical", "Science", "Engineering", "Non-science"] },
+  { text: "Chemistry Confidence", answers: ["Strong", "Moderate", "Weak", "None"] },
+  { text: "Physics Confidence", answers: ["Strong", "Moderate", "Weak", "None"] },
+  { text: "Essay Writing", answers: ["Strong", "Average", "Weak", "Very Weak"] },
+  { text: "Practice Exams", answers: ["0", "1-2", "3-5", "6+"] },
+  { text: "Study Hours", answers: ["0-2", "3-5", "6-10", "10+"] },
+  { text: "Study Plan", answers: ["None", "Loose", "Structured", "Very structured"] },
+  { text: "Essay Practice", answers: ["None", "Some", "Regular", "Frequent"] },
+  { text: "Confidence", answers: ["Low", "Moderate", "High", "Very high"] },
+  { text: "Motivation", answers: ["Low", "Medium", "High", "Extreme"] }
+];
+
+let current = 0;
+let scores = [];
+
+function startQuiz() {
+  document.getElementById("landing").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  showQuestion();
+}
+
+function showQuestion() {
+  let q = questions[current];
+  document.getElementById("question").innerText = q.text;
+
+  let answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+
+  q.answers.forEach((a, i) => {
+    let btn = document.createElement("button");
+    btn.innerText = a;
+    btn.onclick = () => selectAnswer(i);
+    answersDiv.appendChild(btn);
+  });
+
+  updateProgress();
+}
+
+function selectAnswer(index) {
+  scores[current] = index;
+  current++;
+
+  if (current < questions.length) {
+    showQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function goBack() {
+  if (current > 0) {
+    current--;
+    showQuestion();
+  }
+}
+
+function updateProgress() {
+  let percent = ((current) / questions.length) * 100;
+  document.getElementById("progressBar").style.width = percent + "%";
+}
+
+function showResults() {
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("results").classList.remove("hidden");
+
+  let total = scores.reduce((a, b) => a + b, 0);
+  document.getElementById("score").innerText =
+    "Estimated Score Tier: " + (50 + total);
+}
+</script>
+
+</body>
+</html>
