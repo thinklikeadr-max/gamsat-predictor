@@ -644,6 +644,8 @@ Calculate Now
 
 <input type="email" id="email" placeholder="Email Address"/>
 
+<input type="tel" id="phone" placeholder="Phone Number"/>
+
 <button class="primary-btn" onclick="submitDetails()">
 See My Results
 </button>
@@ -701,7 +703,6 @@ const questions = [
 {
 text:"Degree Background",
 answers:[
-{text:"Biomedical / Medicine"},
 {text:"Science"},
 {text:"Engineering / Maths"},
 {text:"Non-science"}
@@ -1031,7 +1032,6 @@ function calculateEstimatedScore(){
 
 let score = 45;
 
-if(userAnswers.includes("Biomedical / Medicine")) score += 2.5;
 if(userAnswers.includes("Science")) score += 1.5;
 if(userAnswers.includes("Engineering / Maths")) score += 1;
 
@@ -1109,6 +1109,9 @@ document.getElementById("name").value;
 const email =
 document.getElementById("email").value;
 
+const phone =
+document.getElementById("phone").value;
+
 if(!name || !email){
 
 alert("Please complete your details.");
@@ -1123,6 +1126,7 @@ const payload = {
 
 name:name,
 email:email,
+phone:phone,
 estimatedScore:estimatedScore,
 estimatedRange:getEstimatedRange(estimatedScore),
 projectedRange:getProjectedRange(estimatedScore),
